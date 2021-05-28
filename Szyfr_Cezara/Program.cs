@@ -51,7 +51,7 @@ namespace Szyfr_Cezara
 
                     tutaj:
 
-                        Console.Write("Wprowadź szyfr (max 25 znaków): ");
+                        Console.Write("Wprowadź szyfr (od -25 znaków do 25 znaków): ");
                         x = Console.ReadLine();
 
                         bool spr = int.TryParse(x, out liczba);
@@ -111,10 +111,15 @@ namespace Szyfr_Cezara
                         break;
                     case '3':
                         tekst = "";
-                        while (tekst.Length < 3)
+                        while (tekst.Length < 3 || sprawdz(tekst) == false)
                         {
-                            Console.Write("Wprowadź szyfr do złamania: ");
+                            Console.Write("Wprowadź tekst do złamania: ");
                             tekst = Console.ReadLine();
+                            if (sprawdz(tekst) == false)
+                            {
+                                Console.WriteLine("Tekst musi być z zakresu od a do z");
+                                continue;
+                            }
                             if (tekst.Length < 3)
                             {
                                 Console.WriteLine("Wyraz musi mieć minimum 3 znaki");
@@ -123,8 +128,13 @@ namespace Szyfr_Cezara
 
                         for (int i = 1; i < 26; i++)
                         {
-                            Console.WriteLine("Przesunięcie o " + i + $" do przodu {szyfr(tekst.ToLower(), i)}");
-                            Console.WriteLine("Przesunięcie o " + i + $" do tyłu {deszyfr(tekst.ToLower(), i)}");
+                            Console.WriteLine("Przesunięcie o +" + i + $" = {szyfr(tekst.ToLower(), i)}");
+                            Console.WriteLine("");
+                        }
+                        for (int i = 1; i < 26; i++)
+                        {
+                            Console.WriteLine("Przesunięcie o -" + i + $" = {deszyfr(tekst.ToLower(), i)}");
+                            Console.WriteLine("");
                         }
                         Console.ReadKey();
                         Console.Clear();
@@ -150,6 +160,11 @@ namespace Szyfr_Cezara
             {
                 char litera = tekst[i];
 
+                if (litera == 32)
+                {
+                    goto przeskok;
+                }
+
                 litera = (char)(litera + liczba);
 
                 if (litera > 'z')
@@ -160,7 +175,7 @@ namespace Szyfr_Cezara
                 {
                     litera = (char)(litera + 26);
                 }
-
+            przeskok:
                 buffer[i] = litera;
             }
 
@@ -175,6 +190,11 @@ namespace Szyfr_Cezara
             {
                 char litera = tekst[i];
 
+                if (litera == 32)
+                {
+                    goto przeskok;
+                }
+
                 litera = (char)(litera - liczba);
 
                 if (litera > 'z')
@@ -185,7 +205,7 @@ namespace Szyfr_Cezara
                 {
                     litera = (char)(litera + 26);
                 }
-
+            przeskok:
                 buffer[i] = litera;
             }
 
@@ -200,10 +220,10 @@ namespace Szyfr_Cezara
             {
                 char litera = tekst[i];
 
-                if (litera < 97 || litera > 122)
+                if ((litera < 97 || litera > 122) && litera != 32)
                 {
                     licznik++;
-                }               
+                }        
             }
 
             if (licznik > 0)
