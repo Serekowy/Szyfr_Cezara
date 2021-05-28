@@ -6,7 +6,7 @@ namespace Szyfr_Cezara
     {
         static void Main(string[] args)
         {
-            string ver = "0.0.2";
+            string ver = "0.0.3";
 
             Console.Title = $"Szyfr Cezara {ver}";
             Console.ForegroundColor = ConsoleColor.Magenta;
