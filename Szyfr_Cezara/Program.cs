@@ -12,7 +12,8 @@ namespace Szyfr_Cezara
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine($"Program do szyfru cezara, wersja {ver}, Autor: Adiks", ver);
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("Program służy do zabawy razem ze znajomymi, można kodować wiadomości i podawać sobie liczbę przesunięć liter, program może posłużyć również jako łamacz szyfru cezara gdyby znajomy nie chciał nam podać liczby przesuniętych liter, miłej zabawy :)");
+            Console.WriteLine("Program służy do zabawy razem ze znajomymi, można kodować wiadomości i podawać sobie liczbę przesunięć liter, " +
+                "program może posłużyć również jako łamacz szyfru cezara gdyby znajomy nie chciał nam podać liczby przesuniętych liter, miłej zabawy :)");
             Console.ResetColor();
             Console.WriteLine("Aby kontynuować naciśnij dowolny klawisz...");
             Console.ReadKey();
@@ -67,7 +68,7 @@ namespace Szyfr_Cezara
                             goto tutaj;
                         }
                         
-                        Console.WriteLine(szyfr(tekst.ToLower(), liczba));
+                        Console.WriteLine("Tekst po szyfrowaniu: " + szyfr(tekst.ToLower(), liczba));
                         Console.ReadKey();
                         Console.Clear();
                         break;
@@ -105,7 +106,7 @@ namespace Szyfr_Cezara
                             goto tutaj;
                         }
 
-                        Console.WriteLine(deszyfr(tekst.ToLower(), liczba));
+                        Console.WriteLine("Tekst po deszyfrowaniu: " + deszyfr(tekst.ToLower(), liczba));
                         Console.ReadKey();
                         Console.Clear();
                         break;
@@ -126,16 +127,14 @@ namespace Szyfr_Cezara
                             }
                         }
 
+                        Console.Clear();
+
                         for (int i = 1; i < 26; i++)
                         {
-                            Console.WriteLine("Przesunięcie o +" + i + $" = {szyfr(tekst.ToLower(), i)}");
+                            Console.WriteLine(i + $" próba = {szyfr(tekst.ToLower(), i)}");
                             Console.WriteLine("");
                         }
-                        for (int i = 1; i < 26; i++)
-                        {
-                            Console.WriteLine("Przesunięcie o -" + i + $" = {deszyfr(tekst.ToLower(), i)}");
-                            Console.WriteLine("");
-                        }
+                        
                         Console.ReadKey();
                         Console.Clear();
                         break;
