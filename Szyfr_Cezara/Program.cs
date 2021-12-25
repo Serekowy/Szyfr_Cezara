@@ -6,132 +6,53 @@ namespace Szyfr_Cezara
     {
         static void Main(string[] args)
         {
-            string ver = "0.0.3";
+            string ver = "0.0.4";
 
             Console.Title = $"Szyfr Cezara {ver}";
-            Console.ForegroundColor = ConsoleColor.Magenta;
-            Console.WriteLine($"Program do szyfru cezara, wersja {ver}, Autor: Adiks", ver);
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("Program służy do zabawy razem ze znajomymi, można kodować wiadomości i podawać sobie liczbę przesunięć liter, " +
-                "program może posłużyć również jako łamacz szyfru cezara gdyby znajomy nie chciał nam podać liczby przesuniętych liter, miłej zabawy :)");
-            Console.ResetColor();
-            Console.WriteLine("Aby kontynuować naciśnij dowolny klawisz...");
-            Console.ReadKey();
-            Console.Clear();
+
+            Class1.start(ver);
+
             for (;;)
             {
-                Console.WriteLine("----------------------");
-                Console.WriteLine("- 1. Szyfrowanie     -");
-                Console.WriteLine("- 2. Deszyfrowanie   -");
-                Console.WriteLine("- 3. Łamanie szyfru  -");
-                Console.WriteLine("- 4. Zakończ program -");
-                Console.WriteLine("----------------------");
-                Console.Write("Wybór: ");
+                Class1.menu();
+
                 char wybor = Console.ReadKey().KeyChar;
                 Console.Clear();
                 switch (wybor)
                 {
                     case '1':
-                        string x, tekst = "";
-                        int liczba;
+                        string tekst = "";
+                        int liczba = 0;
 
-                        while(tekst.Length < 3 || sprawdz(tekst) == false)
-                        {
-                            Console.Write("Wprowadź tekst do szyfrowania: ");
-                            tekst = Console.ReadLine();
-                            if(sprawdz(tekst) == false)
-                            {
-                                Console.WriteLine("Tekst musi być z zakresu od a do z");
-                                continue;
-                            }
-                            if (tekst.Length < 3)
-                            {
-                                Console.WriteLine("Wyraz musi mieć minimum 3 znaki");
-                            }
-                        }
+                        tekst = Class1.sprawdzZakres();
 
-                    tutaj:
+                        liczba = Class1.sprawdzCzyLiczba();
 
-                        Console.Write("Wprowadź szyfr (od -25 znaków do 25 znaków): ");
-                        x = Console.ReadLine();
-
-                        bool spr = int.TryParse(x, out liczba);
-
-                        while (!spr)
-                        {
-                            goto tutaj;
-                        }
-
-                        if (liczba>25 || liczba<-25)
-                        {
-                            Console.WriteLine("Przesunięcie musi być w zakresie od -25 do 25");
-                            goto tutaj;
-                        }
-                        
-                        Console.WriteLine("Tekst po szyfrowaniu: " + szyfr(tekst.ToLower(), liczba));
+                        Console.WriteLine("Tekst po szyfrowaniu: " + Class1.szyfr(tekst.ToLower(), liczba));
                         Console.ReadKey();
                         Console.Clear();
                         break;
                     case '2':
                         tekst = "";
-                        while (tekst.Length < 3 || sprawdz(tekst) == false)
-                        {
-                            Console.Write("Wprowadź tekst do deszyfrowania: ");
-                            tekst = Console.ReadLine();
-                            if (sprawdz(tekst) == false)
-                            {
-                                Console.WriteLine("Tekst musi być z zakresu od a do z");
-                                continue;
-                            }
-                            if (tekst.Length < 3)
-                            {
-                                Console.WriteLine("Wyraz musi mieć minimum 3 znaki");
-                            }
-                        }
 
-                    tutaj2:
+                        tekst = Class1.sprawdzZakres();
 
-                        Console.Write("Wprowadź szyfr: ");
-                        x = Console.ReadLine();
+                        liczba = Class1.sprawdzCzyLiczba();
 
-                        spr = int.TryParse(x, out liczba);
-
-                        while (!spr)
-                        {
-                            goto tutaj2;
-                        }
-                        if (liczba > 25 || liczba < -25)
-                        {
-                            Console.WriteLine("Przesunięcie musi być w zakresie od -25 do 25");
-                            goto tutaj;
-                        }
-
-                        Console.WriteLine("Tekst po deszyfrowaniu: " + deszyfr(tekst.ToLower(), liczba));
+                        Console.WriteLine("Tekst po deszyfrowaniu: " + Class1.deszyfr(tekst.ToLower(), liczba));
                         Console.ReadKey();
                         Console.Clear();
                         break;
                     case '3':
                         tekst = "";
-                        while (tekst.Length < 3 || sprawdz(tekst) == false)
-                        {
-                            Console.Write("Wprowadź tekst do złamania: ");
-                            tekst = Console.ReadLine();
-                            if (sprawdz(tekst) == false)
-                            {
-                                Console.WriteLine("Tekst musi być z zakresu od a do z");
-                                continue;
-                            }
-                            if (tekst.Length < 3)
-                            {
-                                Console.WriteLine("Wyraz musi mieć minimum 3 znaki");
-                            }
-                        }
+
+                        tekst = Class1.sprawdzZakres();
 
                         Console.Clear();
 
                         for (int i = 1; i < 26; i++)
                         {
-                            Console.WriteLine(i + $" próba = {szyfr(tekst.ToLower(), i)}");
+                            Console.WriteLine(i + $" próba = {Class1.szyfr(tekst.ToLower(), i)}");
                             Console.WriteLine("");
                         }
                         
@@ -148,89 +69,6 @@ namespace Szyfr_Cezara
                         break;
                 }
             }
-        }
-        
-        static string szyfr(string tekst, int liczba)
-        {
-            char[] buffer = tekst.ToCharArray();
-            tekst = tekst.ToLower();
-
-            for (int i = 0; i < tekst.Length; i++)
-            {
-                char litera = tekst[i];
-
-                if (litera == 32)
-                {
-                    goto przeskok;
-                }
-
-                litera = (char)(litera + liczba);
-
-                if (litera > 'z')
-                {
-                    litera = (char)(litera - 26);
-                }
-                else if (litera < 'a')
-                {
-                    litera = (char)(litera + 26);
-                }
-            przeskok:
-                buffer[i] = litera;
-            }
-
-            return new string(buffer);
-        }
-        static string deszyfr(string tekst, int liczba)
-        {
-            char[] buffer = tekst.ToCharArray();
-            tekst = tekst.ToLower();
-
-            for (int i = 0; i < tekst.Length; i++)
-            {
-                char litera = tekst[i];
-
-                if (litera == 32)
-                {
-                    goto przeskok;
-                }
-
-                litera = (char)(litera - liczba);
-
-                if (litera > 'z')
-                {
-                    litera = (char)(litera - 26);
-                }
-                else if (litera < 'a')
-                {
-                    litera = (char)(litera + 26);
-                }
-            przeskok:
-                buffer[i] = litera;
-            }
-
-            return new string(buffer);
-        }
-        static bool sprawdz(string tekst)
-        {
-            int licznik = 0;
-            tekst = tekst.ToLower();
-
-            for (int i = 0; i < tekst.Length; i++)
-            {
-                char litera = tekst[i];
-
-                if ((litera < 97 || litera > 122) && litera != 32)
-                {
-                    licznik++;
-                }        
-            }
-
-            if (licznik > 0)
-            {
-                return false;
-            }
-
-            return true;
         }
     }
 }
